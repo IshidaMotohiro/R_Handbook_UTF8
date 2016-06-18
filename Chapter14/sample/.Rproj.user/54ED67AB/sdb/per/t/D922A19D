@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "context(\"Hello World function\")\n\ntest_that(\"check a string:\",{\n            expect_match(hello(), \"Hello, world!\")\n          } )\n",
+    "created" : 1463197379737.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "525885488",
+    "id" : "D922A19D",
+    "lastKnownWriteTime" : 1463199270,
+    "last_content_update" : 1463199270770,
+    "path" : "~/tempTrashSym/sample/tests/testthat/test-hello.R",
+    "project_path" : "tests/testthat/test-hello.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

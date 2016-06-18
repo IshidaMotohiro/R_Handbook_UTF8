@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "\nlengthChar <- function (char) {\n nchar(char)\n}\n",
+    "created" : 1463195936562.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1271682333",
+    "id" : "FC6236AA",
+    "lastKnownWriteTime" : 1463198083,
+    "last_content_update" : 1463198083963,
+    "path" : "~/tempTrashSym/sample/R/lengthChar.R",
+    "project_path" : "R/lengthChar.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "context(\"lengthChar function\")\n\nx <- \"this is test.\"\n\ntest_that(\"check length of string:\",{\n  expect_equal(lengthChar(x) , 13)\n} )\n\n",
+    "created" : 1463190094015.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1094682140",
+    "id" : "2C8FE602",
+    "lastKnownWriteTime" : 1463201095,
+    "last_content_update" : 1463201095527,
+    "path" : "~/tempTrashSym/sample/tests/testthat/test-length.R",
+    "project_path" : "tests/testthat/test-length.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
