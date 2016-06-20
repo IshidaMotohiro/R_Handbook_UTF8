@@ -1,6 +1,4 @@
-
-# 第二版  2014年03月31日
-
+# 第3版  2016年 06 月 18 日
 
 ############################################################
 #                  第６章 データフレーム                   #
@@ -154,11 +152,11 @@ with (iris, {
 })
 
 
-
-
 head (iris$Sepal.Length)
 head (iris  $  Sepal.L)
 
+library (dplyr)
+iris %>% select(-Species) %>% colMeans 
 
 
   ## ----- SECTION 083 データフレームに要素を追加する
@@ -193,7 +191,7 @@ xy2$Names
 xy2$newData <- letters [1:6]
 xy2
 # 新規に追加した列は因子に変換されない
-str(xy2)
+str (xy2)
 
 # 列を追加する別の方法
 cbind (xy2, data.frame (newData2 = 11:16))
@@ -204,7 +202,17 @@ cbind (xy2, data.frame (newData = 11:16) )
 # 「data.frame」関数を使うと列名の重複を調整してくれる
 data.frame (xy2, data.frame (newData = 11:16) )
 
+library (dplyr)
+x <- 1:5
+y <- LETTERS [1:5]
+(xy <- data.frame (X = x, Y = y))
 
+# 行を追加(ただし水準が一致しないので警告が表示され文字列に変換される)
+xy %>% bind_rows (data.frame (X = 6, Y = "Z"))
+
+# 「bind_cols」関数で列を追加
+# xy %>% bind_cols (21:25) はエラーとなる
+xy %>% bind_cols (data.frame (Z = 21:25))
 
 
 
@@ -219,6 +227,8 @@ data.frame (xy2, data.frame (newData = 11:16) )
 xy1 <- merge (x, y)
 str(xy1)
 
+dplyr::inner_join(x, y, by = c("a", "b")) # に相当
+
 xy2 <- dplyr::inner_join(x,y, by = c("a", "b"))
 # b列の因子水準が異なるので文字列に変換されている
 str(xy2)
@@ -230,6 +240,8 @@ dplyr::left_join(x,y, by = c("a", "b"))
 # 「y」列を基準に結合
 merge (x, y, all.y = TRUE)
 dplyr::right_join(x,y, by = c("a", "b"))
+
+
 
 # 両方の列要素を網羅した結合
 merge (x, y, all = TRUE)
@@ -264,14 +276,20 @@ head (airquality)
 subset (airquality, subset = Temp > 80,
       select = c (Ozone, Temp))
 
+library(dplyr) #を使う場合
+airquality %>% select(Ozone, Temp) %>% filter(Temp > 80)
+  
+  
 # 「Day」変数が1と一致するデータの「Temp」列を除いて抽出
 subset (airquality, subset = Day == 1,
       select = -Temp)
 
+airquality %>% select(-Temp) %>% filter(Day == 1) # 「dplyr」の場合
+
 # 「Ozone」と「Wind」列までを抽出
 subset (airquality, select = Ozone:Wind)
 
-
+airquality %>% select(Ozone:Wind) # 「dplyr」の場合
 
 
 
@@ -287,6 +305,8 @@ cars2 <- transform (cars, speed = speed * 1.609,
                     dist2 = dist * 0.3048)
 head (cars2)
 
+library (dplyr)
+cars %>% mutate(speed = speed * 1.609, dist2 = dist * 0.3048) %>% head # 「dplyr」の場合
 
 
 
@@ -330,11 +350,13 @@ expand.grid (blood = c ("A", "AB", "B", "O"),
 # 単純な列ごとの合計
 rowSums (x [, -4])
 
-x %>% rowwise() %>% summarise(X = sum(x1:x3))
+   # 以下 3 行、書籍未記載
+   # library (dplyr)
+   # x %>% rowwise() %>% summarise(X = sum(x1:x3))# 現行のdplyr バージョン(0.43) では rowwise() は期待通りに動かないこと多いので注意
 
 # 行ごとの合計
 colSums (x [, -4])
-
+x %>% select(-g) %>% summarise_each(funs(sum)) # dplyr の場合
 
 # g列の水準ごとの合計を求める
 rowsum (x [ , -4], group = x$g)
@@ -361,6 +383,9 @@ sapply (iris [ , -5], mean)
 
 # 結果をリストで返す
 sapply (iris [ , -5], mean, simplify = FALSE)
+
+# library(dplyr) の場合(出力は省略)
+iris %>% select(-Species) %>% summarise_each(funs(mean))
 
 #「fivenum」関数は5つの要約統計量を出力する
 vapply (iris [, -5], fivenum,
@@ -393,7 +418,8 @@ air2 <- airquality [airCC, ]
 # 5,6行目が削除されている
 head (air2)
 
-
+# library(dplyr) の場合(出力は省略)
+# airquality %>% filter(complete.cases(.)) %>% head
 
 
 
@@ -451,8 +477,13 @@ reshape(test.re)
 
 reshape (tst, v.name = "dataX", varying = list (2:4), direction = "long")
 
+install.packages ("tidyr")
+library (tidyr) # を使う
+# 縦長データを横長に変換
+spread (Indometh, key = time, value = conc)
 
-
+# 横長データを縦長に変換
+gather (iris, key = oldCols, value = Values, -Species)
 
 
 
@@ -472,7 +503,7 @@ reshape (tst, v.name = "dataX", varying = list (2:4), direction = "long")
 
 
 
-  ## ----- SECTION 094 データフレームを並び替える
+  ## ----- SECTION 094 データフレームを並べ替える
 
 set.seed (123)
 
@@ -484,6 +515,19 @@ head (x.y)
 
 x.y2 <- x.y [ order (x.y$name, x.y$x, x.y$y), ]
 head (x.y2, 10)
+
+# 282ページで紹介する「dplyr」パッケージはデータ処理を効率化するための関数が
+# 多数備わっていますが、並べ替えは「arrange」関数を使います。
+library (dplyr)
+x.y %>% arrange(name,x,y)
+
+# 降順
+# name列を降順にする(他の列は昇順) 
+x.y %>% arrange(desc(name),x,y) %>% head
+
+# すべての列を降順にする
+x.y %>% arrange(desc(name),desc(x),desc(y)) %>% head
+
 
 
   ## ----- SECTION 095 高速・効率的なデータ操作を可能にする「dplyr」パッケージ
@@ -545,3 +589,66 @@ hflights %.%
      dep = mean(DepDelay, na.rm = TRUE)
    ) %.%
    filter(arr > 30 | dep > 30)
+
+
+
+   ## ----- SECTION 096 高速・効率的なデータ操作を可能にする「dplyr」パッケージ
+# ggplot2::diamonds をデータフレームに変換
+library (ggplot2)
+head(diamonds)
+
+install.packages ("data.table")
+library (data.table)
+## data.tableに変換
+dia <- data.table(diamonds)
+head (dia)
+
+class(dia)
+# 行の指定(通常のデータフレームと同じ)
+dia [1:3, ]
+
+# 列の指定は変数名を引用符なしで使う
+dia [1:3, color]
+
+# 複数の列はリストで指定する
+dia [1:3, list(color, price)]
+
+# 列番号を指定する場合
+dia [1:3, c(3, 7), with = FALSE]
+
+
+# キーを指定してソートした状態にする
+setkey (dia, color)
+head (dia)
+
+## 複数のキーを設定
+setkey (dia, cut, color)
+head (dia)
+
+
+## 検索する
+dia [J("Fair", "J")]
+
+
+## データフレームとの速度の比較
+install.packages ("rbenchmark")
+
+library (rbenchmark)
+benchmark ("data frame" = { invisible (diamonds [diamonds $ cut == "Fair" &&
+                                                   diamonds $ color == "J", ] ) },
+           "data table" = { invisible (dia [J("Fair", "J")]) })
+
+## グループ別集計
+dia [, mean (price), by = cut]
+
+tracemem(diamonds)
+## コピーが生成される
+diamonds [ diamonds $ cut == "Fair" && diamonds $ color == "J", "price"] <- 0
+
+tracemem(dia)
+## data.table での値の変更には := を使う
+ ## data.table は参照渡しであるためコピーは発生しない
+dia [J("Fair", "J"), price := 0]
+## 
+dia <- copy(dia[J("Fair", "J"), price := 0])
+

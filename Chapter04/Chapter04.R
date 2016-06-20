@@ -1,4 +1,4 @@
-# 第二版  2014年3月29日
+# 第3版  2016年 06 月 18 日
 
 ############################################################
 #                   第4章ベクトルの操作                    #
@@ -39,7 +39,8 @@ length(x)
 
 # プロットのキャプションなどに使うとバックスラッシュは表示されない
 cat (x, "\n")
-"A" "B" "C"
+# "A" "B" "C"
+
 plot (1:10, main = x)
 length (x)
 
@@ -168,6 +169,16 @@ str_extract(z, pattern = ".S.")
 
 x <- "R逆引き"
 y <- "ハンドブック"
+substring (x, first = 2, last = 3)
+
+substring (c(x,y), first = 2)
+
+# アルファベット大文字
+(str1 <- paste (LETTERS [1:10], collapse = ""))
+substr(str1, c (2, 5), c (3,6))
+
+substring (str1, c (2, 5), c (3, 6))
+
 
   ## ----- SECTION 038 特定の文字を区切りとして文字列を分割する
 x <- "R逆引き"
@@ -175,7 +186,7 @@ x <- "R逆引き"
 substring (x, first = )
 
 # アルファベット大文字
-(str1 <- paste(LETTERS, collapse = ""))
+(str1 <- paste (LETTERS, collapse = ""))
 
 # 「substr」の場合は位置ベクトルの一部を利用
 substr (str1, c (2,5), c (3,6))
@@ -190,11 +201,11 @@ substring (str1, c (2,5), c (3,6))
 
 x <- "R逆引き"
 
-strsplit(x, split = "逆")
+strsplit (x, split = "逆")
 
-strsplit(x, split = "")
+strsplit (x, split = "")
 
-y <- c("R逆引き","C&R")
+y <- c ("R逆引き", "C&R")
 
 strsplit(y, NULL)
 
@@ -202,8 +213,15 @@ strsplit(y, split = "逆")
 
 (z <- strsplit(y, c("逆", "&")))
 
-z[[2]]
+z [[2]]
 
+# stringr パッケージを使う
+library (stringr)
+str_split (x, "逆")
+
+# Bを区切り文字とするが分割数は3小に限定
+
+str_split ("ABCABCABCABCABC", "B", n = 3)
 
 # 「.」は正規表現ですべての文字を指定したことになる
 strsplit (x, ".")
@@ -257,12 +275,19 @@ grep ("山田", jp.str, value = TRUE)
 # UTF-8環境（MacやLinux）では以下でもよい（R-2.15以降ではWindowsでも可能）
 # (j <- grep ("幸之\\>", jp.str))
 
-# Perl互換を使った例
-x <- c("AB2C", "DEF", "ghi")
-grep("[[:upper:]]", x, perl = TRUE, value = TRUE)
-#  以下でも動作する環境がある
-grep("[:upper:]", x, value = TRUE)
-#  
+# stringr パッケージ
+library (stringr)
+# "本山"で始まるパターンを含を要素番号
+str_detect (jp.str, pattern = "^本山")
+# 一致している文字列を取り出す
+str_subset (jp.str, pattern = "^本山")
+
+  # Perl互換を使った例 （本書には掲載していません）
+  x <- c("AB2C", "DEF", "ghi")
+  grep("[[:upper:]]", x, perl = TRUE, value = TRUE)
+  #  以下でも動作する環境がある
+  grep("[:upper:]", x, value = TRUE)
+  #  
 
 
 # 検索文字列の一致した位置と長さ
@@ -284,23 +309,22 @@ tmp <- gregexpr ("https?://.+?/(.+/)*?", str, perl = TRUE) # 荒引健氏によ�
 
 substring(str, tmp[[1]], tmp[[1]] + attr (tmp[[1]], 'match.length') -1)
 
-  ## エスケープの利用（本書には掲載していません）
-  (x <- c("AA","B.", "C\\C"))
-  grep(".", x, value = TRUE)
-  grep("\\.", x, value = TRUE)
+   ## エスケープの利用（本書には掲載していません）
+   (x <- c("AA","B.", "C\\C"))
+   grep(".", x, value = TRUE)
+   grep("\\.", x, value = TRUE)
 
+   jp <- "山本"
+   #  Windowsでの文字コードはCP932
+   charToRaw(jp)
+  
+   # ところが文字コードがUTF-8に変換される
+   (jp2 <- gsub("山","川",jp))
+   charToRaw(jp2)
 
-jp <- "山本"
-#  Windowsでの文字コードはCP932
-charToRaw(jp)
-
-# ところが文字コードがUTF-8に変換される
-(jp2 <- gsub("山","川",jp))
-charToRaw(jp2)
-
-#  を指定するとCP932として処理される
-(jp3 <- gsub("山","川",jp,fixed = TRUE))
-charToRaw(jp3)
+   #  fixed を指定するとCP932として処理される
+   (jp3 <- gsub ("山", "川", jp, fixed = TRUE))
+   charToRaw(jp3)
 
 
 
@@ -311,15 +335,14 @@ head (alice.vec)
 
 table (alice.vec)
 
-x <- c ("納豆", "醤油")
-grep ("納", x) # R-2.15 以降  Windowsでもエラーになりません。
+   x <- c ("納豆", "醤油")
+   grep ("納", x) # R-2.15 以降  Windowsでもエラーになりません。
+   charToRaw ("納")
+   charToRaw ("[")
 
-charToRaw ("納")
-charToRaw ("[")
-
-x <- c("ABC", "D3", "EF G")
-grep("\\s", x)
-grep("\\.", x)
+   x <- c("ABC", "D3", "EF G")
+   grep("\\s", x)
+   grep("\\.", x)
 
 
 
@@ -355,33 +378,35 @@ gsub ("[0-9]$", "", z)
 gsub ("[0-9]+$", "", z)
 
 # stringr パッケージを使う
-library(stringr)
+library (stringr)
 # あをアに、うをウに置換した2つの実行例が出力される
-str_replace_all("あいうえお", c("あ","う"), c("ア","ウ"))
+str_replace_all ("あいうえお", c ("あ","う"), c ("ア","ウ"))
 
 # stringiパッケージで指定された文字をすべて置換
-stringi::stri_replace_all_fixed("あいうえお", c("あ","う"), c("ア","ウ"), vectorize_all = FALSE)
+stringi::stri_replace_all_fixed ("あいうえお", c ("あ","う"), c ("ア","ウ"), vectorize_all = FALSE)
 
 jp <- "山本"
 # Windowsでの文字コードはCP932
 # ここで使われている漢字はそれぞれが２バイト
- charToRaw(jp)
+charToRaw (jp)
 
 # ところが文字コードがUTF-8に変換される
-(jp2 <- gsub("山","川",jp))
+(jp2 <- gsub ("山", "川", jp))
 # 漢字がそれぞれが３バイトになっている
-charToRaw(jp2)
+charToRaw (jp2)
 
 # fixed = TRUEを指定するとCP932として処理される
-(jp3 <- gsub("山","川",jp, fixed = TRUE))
- charToRaw(jp3)
+(jp3 <- gsub ("山", "川", jp, fixed = TRUE))
+charToRaw (jp3)
 
  
  # stringi パッケージで複数の文字列を同時に置換する
- x1 <- c("織田信長", "豊臣秀吉", "徳川家康")
+ x1 <- c ("織田信長", "豊臣秀吉", "徳川家康")
  # 織田を藤原に、豊臣を木下に、徳川を松平に置換
- stringi::stri_replace_all_fixed(x1, c("織田","豊臣", "徳川"), c("藤原", "木下", "松平"), vectorize_all = FALSE)
+ stringi::stri_replace_all_fixed (x1, c ("織田","豊臣", "徳川"), c("藤原", "木下", "松平"), vectorize_all = FALSE)
 
+ stringr::str_replace_all (x1, c (織田 = "藤原", 豊臣 = "木下", 徳川 = "松平"))
+ 
  
  
   ## ----- SECTION 042  文字列の文字コードを確認する/指定の文字コード体系に変更する
@@ -402,6 +427,16 @@ y <- iconv ("あ", from = "CP932", to = "UTF-8")
 # UTF-8での文字コードに変換されている
 charToRaw (y)
 
+# 文字コードが不明な場合
+# install.packages ("rvest")
+library (rvest)
+
+x1 <- "日本語"
+x2 <- iconv (x1, to = "UTF-8")
+
+guess_encoding (x1)
+guess_encoding (x2)
+
 # stringi パッケージを利用
 stringi::stri_escape_unicode(y)
 
@@ -416,13 +451,6 @@ y <- enc2utf8 ("あ")
 as.u_char (utf8ToInt (y))
 
 
-# 文字コードが不明の場合
-library(rvest)
-# 推測してくれる
-x1 <- "日本語"
-x2 <- iconv(x1, to = "UTF-8")
-guess_encoding(x1)
-guess_encoding(x2)
 
 x <- data.frame (Id = c ("もも", "くり", "かき"))
 write.table (x, file = "x.csv", fileEncoding = "UTF-8")
@@ -435,6 +463,7 @@ write.table(x, out)
 close (out)
 
 
+## ----- SECTION 043 因子ベクトルの基礎
 
 
 
@@ -472,7 +501,7 @@ x [, drop = TRUE]
 
 
 
-  ## ----- SECTION 044  因子の水準に並び順を定義する
+  ## ----- SECTION 045  因子の水準に並び順を定義する
 # 水準が3で、それぞれ要素が5個のベクトル
 # 水準には並び順がある
 (x <- gl (3, 5, labels = c ("あ", "い", "う")) )
@@ -632,7 +661,7 @@ mode (y2)
 # 「ave」関数でデータフレームと同じ行数のベクトルとして出力
 uptake.m <- ave (CO2$uptake, CO2 [c ("Type", "Treatment")], FUN = mean )
 # 水準の組み合わせに使われた添字
-index <- tapply (CO2$uptake, CO2 [c ("Type", "Treatment")] 
+index <- tapply (CO2$uptake, CO2 [c ("Type", "Treatment")] )
 index.fac <- interaction (CO2$Type, CO2$Treatment)
 
 data.frame(index = index, factor = index.fac, mean = uptake.m)
@@ -705,7 +734,6 @@ mode (x)
 
 # 0 以外の数値は「TRUE」に変換されます
 (y <- 0:5)
-[1] 0 1 2 3 4 5
 (y2 <- as.logical (y))
 
 # 文字列は「F」と「T」を除き「NA」に強制変換されます
@@ -829,7 +857,7 @@ x <- x [-(1:15)]
 x
 
 #  連番ではない場合の削除方法
-(x <- x [ -c(2,4,6,8,10)])
+(x <- x [ -c(2, 4, 6, 8, 10)])
 
 # x を数値ベクトルに変更
 x <- -5:5
@@ -853,7 +881,7 @@ z
 
 z [3]
 
-z [[3]] # 
+z [[3]] 
 
 z [ names (z) == "B" ]
 

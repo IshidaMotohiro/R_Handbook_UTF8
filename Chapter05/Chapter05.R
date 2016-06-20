@@ -1,3 +1,5 @@
+# 第3版  2016年 06 月 18 日
+
 
 ############################################################
 #                        第5章 行列                        #
@@ -444,10 +446,8 @@ str (B)
 
   ## ----- SECTION 078 BLAS の導入
 
-sudo apt-get install libblas-dev liblapack-dev libatlas-base-dev
-
-
-./configure --with-blas
+# sudo apt-get install libblas-dev liblapack-dev libatlas-base-dev
+# ./configure --with-blas
 
 # 以下はオプション指定の例です
 # ./configure --with-blas='-L/usr/lib64/atlas -latlas -lptf77blas -lpthrea' --with-lapack='-L/usr/lib64/atlas -llapack -lptcblas'

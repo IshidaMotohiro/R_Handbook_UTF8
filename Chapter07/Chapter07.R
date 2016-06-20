@@ -1,6 +1,4 @@
-
-# 第二版  2014年03月31日
-
+# 第3版  2016年 06 月 18 日
 
 ############################################################
 #                 第７章 リスト／配列／表                  #
@@ -8,11 +6,7 @@
 
 
 
-
-
-
-
-  ## ----- SECTION 096 リスト処理の基礎
+  ## ----- SECTION 097 リスト処理の基礎
 
 .Platform
 
@@ -27,7 +21,7 @@ str (lm1)
 
 
 
-  ## ----- SECTION 097 リストを作成する
+  ## ----- SECTION 098 リストを作成する
 (myList <- list (x = 1:5, y = data.frame (a = 1:5, b = LETTERS[1:5]),
                  z = matrix(1:9, nrow = 3)))
 # 要素をリストとして取り出す
@@ -55,9 +49,39 @@ myList [[2]][2]
 (z2 <- do.call(cbind, z))
 
 
+# 学生データを再帰的なリストとして生成
+students <- list (id1 = list (
+  name = "鈴木",
+  sex = "男",
+  grades =list ( 国語 = 52 , 数学 = 55, 英語 = 58)),
+  id2 = list (
+    name = "佐藤",
+    sex = "女",
+    grades = list ( 国語 = 71, 数学 = 73, 英語 = 77)),
+  id3 = list (
+    name = "山田",
+    sex = "女",
+    grades = list ( 国語 = 90, 数学 = 92, 英語 = 99)))
+
+# 
+install.packages ("rlist")
+library (dplyr) ; library (rlist)
+# リストから名前を取り出す
+students %>% list.map(name)
+
+# リストから名前と性別を取り出す
+students %>% list.select (name, sex)
+
+# 表示形式指定して取り出す
+students %>% list.iter (cat (name, ":", sex, "\n"))
+
+# 条件を指定して取り出し、その結果の表示形式を指定する
+students %>% list.filter (grades$国語 > 70) %>%
+  list.iter (cat (name, ":", sex, ":", grades$国語 ,"\n"))
 
 
-  ## ----- SECTION 098 リストをベクトルに変換する
+
+  ## ----- SECTION 099 リストをベクトルに変換する
 (myList <- list (x = 1:3, y = LETTERS[1:3],
                  z = as.factor (letters[1:3])))
 
@@ -89,7 +113,7 @@ str (myList4)
 
 
 
-  ## ----- SECTION 099 リストの要素ごとに演算を行う
+  ## ----- SECTION 100 リストの要素ごとに演算を行う
 
 (x <- list (A = 40:60, B = 50:70, C = 60:80))
 # 各要素の分位点を計算
@@ -130,7 +154,7 @@ rapply (X, nchar, classes = "character",
 
 
 
-  ## ----- SECTION 100 配列（Array）オブジェクトの基礎
+  ## ----- SECTION 101 配列（Array）オブジェクトの基礎
 # 髪と眼の色の対応
 HairEyeColor
 
@@ -148,7 +172,7 @@ Titanic ["1st", "Female", , ]
 
 
 
-  ## ----- SECTION 101 配列オブジェクトを作成する
+  ## ----- SECTION 102 配列オブジェクトを作成する
 
 (x <- array (1:12, dim = c (3, 4)))
 
@@ -207,14 +231,12 @@ y [ y > 5 ]
 y [ y > 5 ] <- 0
 y
 
+   # library(rlist)
+   # list.map(y, y > 5)
 
 
-library(rlist)
 
-list.map(y, y > 5)
-
-
-  ## ----- SECTION 102 配列の次元ごとに計算する
+  ## ----- SECTION 103 配列の次元ごとに計算する
 
 (y <- array (c (rep (1, 6), rep (2, 6), rep (3,6), rep (4,6)),
              dim = c (2, 3, 4)) )
@@ -255,7 +277,7 @@ apply (y, c (2, 3), sum)
 
 
 
-  ## ----- SECTION 103 配列に周辺度数を追加する
+  ## ----- SECTION 104 配列に周辺度数を追加する
 
 # 2行3列の表を二つ用意
 (y <- array (c (rep (1, 6), rep (2, 6)), dim = c (2, 3, 2)) )
@@ -283,7 +305,7 @@ addmargins (y, margin = c (1, 2))
 
 
 
-  ## ----- SECTION 104 多次元配列を2次元に変換する
+  ## ----- SECTION 105 多次元配列を2次元に変換する
 (x <- array (1:12, dim = c(2, 2, 3)))
 
 N <- list (sex = c ("F", "M"), course = c ("理系", "文系"),
@@ -321,7 +343,7 @@ ftable (Titanic, row.vars = 2:1, col.vars = c("Age", "Survived"))
 
 
 
-  ## ----- SECTION105 配列を転置する
+  ## ----- SECTION106 配列を転置する
 # 前節の最初に作成したオブジェクト「x」を利用します
 x <-  array (1:12, dim = c(2, 2, 3),
                dimnames = list (sex = c ("F", "M"),
@@ -344,7 +366,7 @@ aperm (x, perm = c (3, 1, 2))
 
 
 
-  ## ----- SECTION 106 頻度表を作成する
+  ## ----- SECTION 107 頻度表を作成する
 set.seed (123)# 乱数を設定
 # サイコロを100回振った結果をシミュレーション
 x <- sample (1:6, 100, rep = TRUE)
@@ -379,7 +401,7 @@ z [[1]]
 
 
 
-  ## ----- SECTION 107 分割表を作成する
+  ## ----- SECTION 108 分割表を作成する
 
 set.seed (123) # 乱数をセットする
 # 男女別進路調査データと仮定する
@@ -432,7 +454,7 @@ xtabs (Freq ~ ., data = z)
 
 
 
-  ## ----- SECTION 108  表をLaTeXやHTMLの形式で出力する
+  ## ----- SECTION 109  表をLaTeXやHTMLの形式で出力する
 (x <- data.frame (sex = rep (c ("男", "女"), 2),
                   dir = rep (c ("理", "文"), 2)))
 

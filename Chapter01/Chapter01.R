@@ -1,4 +1,4 @@
-# 第3版    2015年05月11日
+# 第3版    2016年06月19日
 
 ############################################################
 #                    第１章 R言語の基礎                    #
@@ -26,6 +26,7 @@ plot (1:10, 1:10,
 
 options(op) # もとに戻す
 
+# 履歴の保存件数(.Rprofileで設定されていれば表示)
 Sys.getenv("R_HISTSIZE")
 
 
@@ -91,7 +92,7 @@ options (defaultPackages = c (x, "lattice"))
 # デフォルトのcranミラーを設定
 #  これによりインストール時にサーバーを指定する必要がなくなる
 
-options(repos = "https://cran.md.tsukuba.ac.jp")
+options(repos = "https://cran.ism.ac.jp")
 
 
 
@@ -117,12 +118,30 @@ find ("^chi", simple.words = FALSE)
 
 
 
+  ## ----- SECTION 010  Rの統合環境「RStudio」を使う
+
+dice <- function (x) {
+  tmp <- sample(1:6, x, replace = TRUE)
+   hist(tmp)
+}
 
   ## ----- SECTION 011  パッケージのインストール
 
+install.packages("devtools")
+# library (devtools)
+# install_github("rasmusab/pingr")
+devtools::install <- github("hadley/dplyr")
+
+# 第3版1刷では間にあいませんでしたが githubinstall パッケージを利用すると
+# パッケージ名を指定するだけで、手軽にGithub からインスールできます
+# 同名あるいは類似の名前のパッケージが存在する場合は、いずれを選択するのか
+# 確認を求められます
+library (githubinstall)
+githubinstall ("AnomalyDetection")
+
+
 options (repos = "https://cran.md.tsukuba.ac.jp")
 install.packages ("パッケージ名を入力")
-
 
 ## 上記を実行し依存関係でエラー出た場合
 install.packages ("パッケージ", dependencies = TRUE)
@@ -162,14 +181,8 @@ update.packages (ask = TRUE)
 download.file("http://rmecab.jp/data.R", destfile = "data.R")
 
 
-
-install.packages("devtools")
- # library (devtools)
- # install_github("rasmusab/pingr")
-devtools::install <- github("rasmusab/pingr")
-
-
-
+options (repos = "https://cran.ism.ac.jp")
+install.packages ("パッケージの名称")
 
 
 
