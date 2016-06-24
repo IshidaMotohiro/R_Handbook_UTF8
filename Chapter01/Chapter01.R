@@ -100,10 +100,10 @@ options(repos = "https://cran.ism.ac.jp")
 
   ## ----- SECTION 008 作業フォルダの設定
 
-read.csv ("myData.csv")
+read.csv ("Chapter01/myData.csv")
 getwd ()
-setwd ("C:/Users/Ishida/Documents")# Windows
-setwd ("/Users/Ishida/Documents") # Mac OS X 
+setwd ("C:/Users/Ishida/Documents/R_Handbook_***/Chapter01/myData.csv")# Windows
+setwd ("/Users/Ishida/Documents/R_Handbook_UTF8") # Mac OS X 
 
 
 

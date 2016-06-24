@@ -45,13 +45,13 @@ file.show ("Chapter09/data.csv")
 ## 5,山下,女,90
 
     # 参考 コネクションを使って作成する方法 (本書に記載なし)
-    con <- file (description = "data.csv", open = "wt")
+    con <- file (description = "Chapter09/data.csv", open = "wt")
     isOpen (con, rw = "wt")
     cat ("Id,Name,Sex,Grade\n1,山田,男,60\n2,加藤,男,70\n3,佐藤,女,80\n4,鈴木,男,85\n5,山下,女,90\n", file = con)
     # コネクションを閉じる
     close (con)
     # 利用後にファイルを削除するには
-    # unlink ("data.csv")
+    # unlink ("Chapter09/data.csv")
     
 # ファイルを確認する
 file.show ("Chapter09/data.csv")
@@ -70,7 +70,7 @@ file.show ("Chapter09/data.csv")
 file.show ("Chapter09/data2.csv")
 
      # 参考 コネクションを使って作成する方法 (本書に記載なし)
-     con <- file (description = "data2.csv", open = "wt")
+     con <- file (description = "Chapter09/data2.csv", open = "wt")
      isOpen (con, rw = "wt")
      cat ("2013年01年01月現在\n記録者,石田基広\n\n1,'山田','男',60\n2,'加藤','男',70\n3,'佐藤','女',80\n4,'鈴木','男',85\n5,'山下','女',90\n", file = con)
      # コネクションを閉じる
@@ -83,7 +83,7 @@ file.show ("Chapter09/data2.csv")
 # ヘッダや文字区切りなどを明示的に指定する
 (x2 <- read.csv ("Chapter09/data2.csv", skip = 3, header = FALSE, quote = "'" ))
     # 利用後にファイルを削除するには
-     # unlink ("data2.csv")
+     # unlink ("Chapter09/data2.csv")
 
 
 # 変数名を指定する
@@ -119,7 +119,7 @@ getOption("stringsAsFactors")
 file.show ("Chapter09/raw.txt")
 
      ## 参考 コネクションを使って作成する方法 (本書に記載なし)
-     con <- file (description = "raw.txt", open = "wt")
+     con <- file (description = "Chapter09/raw.txt", open = "wt")
      isOpen (con, rw = "wt")
      cat ("これはテキストファイルです\n1 2 3 4 5\n", file = con)
      # コネクションを閉じる
@@ -158,7 +158,7 @@ file.show ("Chapter09/saved.csv")
 
 # 行番号の列が左に追加されている他，文字列に引用符が加わっているのでこれらを削除する
 write.csv (x3, file = "Chapter09/saved.csv", quote = FALSE, row.names = FALSE)
-file.show ("saved.csv")
+file.show ("Chapter09/saved.csv")
 
 
 
@@ -344,7 +344,7 @@ irisDB2 %>% filter (Sepal.Length > 10)
 
   ## ----- SECTION 129  文字コードを指定してファイルを読み込む
 # UTF-8で作成されたファイルをWindows版Rで読み込む
-x <- read.table ("utf8.csv", sep = ",", header = TRUE,
+x <- read.table ("Chapter09/utf8.csv", sep = ",", header = TRUE,
                  fileEncoding = "UTF8")
 # 利用できる文字コードを確認する
 iconvlist ()
@@ -403,20 +403,20 @@ source ("x.R")
 
   ## ----- SECTION 132 ファイルやフォルダを操作する
 # ファイルを作成
-file.create ("hoge.txt")
+file.create ("Chapter09/hoge.txt")
 # ファイルの情報を確認
-file.info ("hoge.txt")
+file.info ("Chapter09/hoge.txt")
 
 # ファイルが存在するか
-file.exists ("hoge.txt")
+file.exists ("Chapter09/hoge.txt")
 
 # ファイル名の変更
-file.rename ("hoge.txt", "foo.txt")
+file.rename ("Chapter09/hoge.txt", "Chapter09/foo.txt")
 
 # ファイルを削除
-file.remove ("foo.txt")
+file.remove ("Chapter09/foo.txt")
 
-# (x <- unlink ("foo.txt") ) も可能
+# (x <- unlink ("Chapter09/foo.txt") ) も可能
 
 # フォルダを作成
 dir.create ("tmp")
